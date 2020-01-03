@@ -39,8 +39,16 @@ public class CfmlImportImpl extends CfmlTagImpl implements CfmlImport {
 
   @Override
   public String getImportString() {
+    String retval = null;
     PsiElement taglib = getAttributeValueElement("taglib");
-    return taglib != null ? taglib.getText() : null;
+    if (taglib != null) {
+      retval = taglib.getText();
+    }
+    PsiElement path = getAttributeValueElement("path");
+    if (path != null) {
+      retval = path.getText();
+    }
+    return retval;
   }
 
   @Override
@@ -54,6 +62,10 @@ public class CfmlImportImpl extends CfmlTagImpl implements CfmlImport {
     PsiElement taglib = getAttributeValueElement("taglib");
     if (taglib != null) {
       return new PsiReference[]{new CfmlComponentReference(taglib.getNode(), this)};
+    }
+    PsiElement cfcImportPath = getAttributeValueElement("path");
+    if (cfcImportPath != null) {
+      return new PsiReference[]{new CfmlComponentReference(cfcImportPath.getNode(), this)};
     }
     return super.getReferences();
   }
