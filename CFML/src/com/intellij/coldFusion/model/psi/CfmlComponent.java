@@ -24,6 +24,9 @@ import org.jetbrains.annotations.Nullable;
 public interface CfmlComponent extends CfmlPsiElement, CfmlNamedElement {
   CfmlComponent[] EMPTY_ARRAY = new CfmlComponent[0];
 
+  @Nullable
+  String getDescription();
+
   CfmlFunction @NotNull [] getFunctions();
 
   CfmlFunction @NotNull [] getFunctionsWithSupers(boolean isSuperPriority);
