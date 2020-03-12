@@ -20,14 +20,24 @@ public class CfmlTagLoopImpl extends CfmlTagImpl {
   }
 
   public static class Variable extends CfmlAttributeNameImpl implements CfmlVariable {
+    private boolean isItem = false;
+
     public Variable(@NotNull ASTNode node) {
       super(node);
+    }
+
+    public Variable(@NotNull ASTNode node, boolean isItem) {
+      this(node);
+      this.isItem = isItem;
     }
 
     @Override
     public PsiType getPsiType() {
       PsiElement parent = getParent();
       if (!(parent instanceof CfmlTagLoopImpl)) return null;
+      if (!isItem && ((CfmlTagLoopImpl)parent).findChildByType(CfmlElementTypes.FORTAGITEMATTRIBUTE) != null) {
+        return new CfmlType("numeric");
+      }
       PsiElement arrayReference = ((CfmlTagLoopImpl)parent).getArrayReferenceExpression();
       if (!(arrayReference instanceof CfmlTypedElement)) return null;
       PsiType type = ((CfmlTypedElement)arrayReference).getPsiType();
@@ -93,14 +103,14 @@ public class CfmlTagLoopImpl extends CfmlTagImpl {
     }
     return CfmlPsiUtil.processDeclarations(processor, state, lastParent, this);
   }
-  
-   CfmlExpression getArrayReferenceExpression () {
-     PsiElement valueElement = getAttributeValueElement("array");
-     if (valueElement == null) return null;
-     for (PsiElement cur = valueElement.getFirstChild(); cur != null; cur = cur.getNextSibling()) {
-       if (cur instanceof CfmlExpression) return (CfmlExpression)cur;
-     }
-     return null;
+
+  CfmlExpression getArrayReferenceExpression() {
+    PsiElement valueElement = getAttributeValueElement("array");
+    if (valueElement == null) return null;
+    for (PsiElement cur = valueElement.getFirstChild(); cur != null; cur = cur.getNextSibling()) {
+      if (cur instanceof CfmlExpression) return (CfmlExpression)cur;
+    }
+    return null;
   }
 
   @Override

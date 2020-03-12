@@ -242,6 +242,10 @@ public class CfmlParser implements PsiParser {
           readValue(builder, CfmlElementTypes.ATTRIBUTE_VALUE);
           attrMarker.done(CfmlElementTypes.FORTAGINDEXATTRIBUTE);
         }
+        else if ("item".equals(attributeName) && "cfloop".equals(tagName)) {
+          readValue(builder, CfmlElementTypes.ATTRIBUTE_VALUE);
+          attrMarker.done(CfmlElementTypes.FORTAGITEMATTRIBUTE);
+        }
         else {
           readValue(builder, CfmlElementTypes.ATTRIBUTE_VALUE);
           attrMarker.done(CfmlElementTypes.ATTRIBUTE);

@@ -55,6 +55,12 @@ public interface CfmlElementTypes extends CfmlStubElementTypes {
       return new CfmlTagLoopImpl.Variable(node);
     }
   };
+  IElementType FORTAGITEMATTRIBUTE = new CfmlCompositeElementType("FORTAGINDEXATTRIBUTE") {
+    @Override
+    public PsiElement createPsiElement(ASTNode node) {
+      return new CfmlTagLoopImpl.Variable(node, true);
+    }
+  };
   IElementType FORTAGEXPRESSION = new CfmlCompositeElementType("FORTAGEXPRESSION") {
     @Override
     public PsiElement createPsiElement(ASTNode node) {
