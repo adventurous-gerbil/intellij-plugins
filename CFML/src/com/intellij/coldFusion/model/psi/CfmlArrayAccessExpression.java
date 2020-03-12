@@ -13,16 +13,15 @@ public class CfmlArrayAccessExpression extends CfmlCompositeElement implements C
   }
 
   @Nullable
-  public CfmlReference getReferenceExpression() {
-    return findChildByClass(CfmlReferenceExpression.class);
+  public CfmlTypedElement getInnerExpression() {
+    return findChildByClass(CfmlTypedElement.class);
   }
 
   @Nullable
   public PsiType getExternalType() {
-    final CfmlReference referenceExpression = getReferenceExpression();
-    if (referenceExpression != null) {
-      final PsiElement resolve = referenceExpression.resolve();
-      return resolve instanceof CfmlVariable ? ((CfmlVariable)resolve).getPsiType() : null;
+    final CfmlTypedElement innerExpression = getInnerExpression();
+    if (innerExpression != null) {
+      return innerExpression.getPsiType();
     }
     return null;
   }
@@ -31,11 +30,6 @@ public class CfmlArrayAccessExpression extends CfmlCompositeElement implements C
   @Nullable
   public PsiType getPsiType() {
     PsiType type = getExternalType();
-
-    if (type == null) {
-      CfmlReference referenceExpression = getReferenceExpression();
-      type = referenceExpression != null ? referenceExpression.getPsiType() : null;
-    }
 
     if (type instanceof PsiArrayType) {
       return ((PsiArrayType)type).getComponentType();
